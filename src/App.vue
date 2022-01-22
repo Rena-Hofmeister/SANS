@@ -25,7 +25,6 @@ async function getLink(url) {
       urlObject = data;
     });
 
-  console.log(urlObject);
   return urlObject;
 }
 
