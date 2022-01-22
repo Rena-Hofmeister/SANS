@@ -2,7 +2,14 @@
 
 ## Project setup
 ```
+Clone the repo
+
 npm install
+
+Set environment variable
+
+To host, run command: npm run serve
+Visit [localhost:8080](http://localhost:8080/)
 ```
 
 ### Compiles and hot-reloads for development
