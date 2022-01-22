@@ -1,0 +1,22 @@
+{
+	"info": {
+		"_postman_id": "b4c6f354-41e9-42e2-94ab-95fb2fd5a863",
+		"name": "Security Innovation",
+		"description": "Test for Security Innovation URL coding challenge.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "lambdaTest",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
