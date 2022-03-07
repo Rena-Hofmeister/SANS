@@ -1,4 +1,4 @@
-# siapp
+# SANS
 
 ## Project setup
 ```
