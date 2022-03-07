@@ -1,44 +1,37 @@
-/*
- *@desc end point event handler used to return a short link url. 
- *@param {string} queryStringParam longUrl
-*/
-exports.handler = async (event) => {
-  let response;
-  let url = 
-    {
-      "longUrl": event['queryStringParameters']['longUrl']
-    };
+const AWS = require('aws-sdk');
+const ddb = new AWS.DynamoDB.DocumentClient({region: 'us-east-2'});
 
-  if(url == null) {
-    response = {
-      statusCode: 400,
-      body: "invalid url",
-    };
-    
-    return response;
-  }
+exports.handler = async (event, context, callback) => {
+    if(Object.keys(event).length !== 5) {
+        return {statusCode: 400, body: 'invalid parameters'};
+    }
 
-  try {
-      let urlObject = shortenUrl(url.longUrl)
-      response = {
-        statusCode: 200,
-        body: JSON.stringify(urlObject),
-      };
-  } catch(error) {
-    response = {
-      statusCode: error.statusCode,
-      body: error.statusCode + ": " + error.message
-    };
-  }
-  return response;
+    const requestId = context.awsRequestId;
+
+    await createObject(event, requestId).then(() => {
+        callback(null, {
+            statusCode: 201,
+            body: 'The movie '+event.title+' has been added!',
+            headers: {
+                'Access-Control-Allow-Origin' : '*'
+            }
+        });
+    }).catch((err) => {
+        console.log(err);
+    });
 };
 
-/*
- *@desc Return a random string to be used as a url
- *@param {string} url
-*/
-const shortenUrl = url => {
-  let shortUrl = 'www.' + (Math.random() + 1).toString(36).substring(7) + '.com';
-  
-  return {'longUrl': url, 'shortUrl': shortUrl};
-};
+function createObject(event, requestId) {
+    const params = {
+        TableName: 'movieList',
+        Item: {
+            'movieId' : requestId,
+            'title' : event.title,
+            'year': event.year,
+            'format': event.format,
+            'length': event.length,
+            'rating': event.rating
+        }
+    };
+    return ddb.put(params).promise();
+}
